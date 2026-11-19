@@ -1,0 +1,73 @@
+{# C:\aimlmini\app\templates\method.html #}
+{% extends "base.html" %}
+{% block title %}Method | Response Atlas{% endblock %}
+{% block head %}
+<script src="/static/vendor/echarts.min.js"></script>
+{% endblock %}
+{% block content %}
+<h1>How this was built</h1>
+<p class="lede">The data, the models, the checks, and where the model should not be trusted.</p>
+
+<section>
+  <h2>Model card</h2>
+  <div class="panel">
+    <table class="data model-card" id="card-table">
+      <caption class="visually-hidden">Model card</caption>
+      <tbody id="card-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Model checks</h2>
+  <div class="grid">
+    <div class="col-12 panel">
+      <div class="chart-title" id="c10-title"></div>
+      <div id="chart-c10" class="chart" role="img"></div>
+      <p class="caption">Predicted versus actual in ten bins on the test period. Points on the diagonal mean the estimate matches reality. The test period is the newest 20 percent of 2023 incidents.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c11-title"></div>
+      <div id="chart-c11" class="chart" role="img"></div>
+      <p class="caption">Share of test cases whose real response time fell inside the 10th to 90th percentile range, by borough, with a line at 80 percent.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c12-title"></div>
+      <div id="chart-c12" class="chart" role="img"></div>
+      <p class="caption">Mean absolute error by hour of day on the test period, for the 50th percentile model.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Data and leakage rules</h2>
+  <div class="panel">
+    <div id="method-static">
+      <h3>Leakage rules</h3>
+      <ul>
+        <li>No dispatch, travel or assignment timestamps are used. They are recorded after the call and are part of the answer.</li>
+        <li>Only initial call type and initial severity are used, never the final versions assigned later.</li>
+        <li>All aggregates were computed from the training period only.</li>
+        <li>The split is by time: the oldest 80 percent of incidents train, the newest 20 percent test. A random split would leak the future into the past.</li>
+      </ul>
+      <h3>Features</h3>
+      <ul>
+        <li>Time: hour, day of week, month, weekend flag, hour band.</li>
+        <li>Place: borough, zip zone (MODZCTA), dispatch area.</li>
+        <li>Incident: initial call type, initial severity level.</li>
+        <li>Weather: citywide temperature, precipitation, snowfall and snow flag from Open Meteo, plus a US holiday flag.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Limitations</h2>
+  <div class="panel">
+    <ul id="limitations"></ul>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script type="module" src="/static/js/method.js"></script>
+{% endblock %}

@@ -1,0 +1,105 @@
+{# C:\aimlmini\app\templates\insights.html #}
+{% extends "base.html" %}
+{% block title %}Insights | Response Atlas{% endblock %}
+{% block head %}
+<script src="/static/vendor/echarts.min.js"></script>
+{% endblock %}
+{% block content %}
+<h1>What drives delay</h1>
+<p class="lede">Patterns across 350,253 incidents, then how the models compare and which features matter most.</p>
+
+<section>
+  <h2>When</h2>
+  <div class="grid">
+    <div class="col-12 panel">
+      <div class="chart-title" id="h1-title"></div>
+      <div id="chart-h1" class="chart tall" role="img"></div>
+      <p class="caption">Median response time in minutes for every hour and weekday. Data covers 2023 incidents with a valid response time.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="h2-title"></div>
+      <div id="chart-h2" class="chart tall" role="img"></div>
+      <p class="caption">Median response by borough and hour.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c1-title"></div>
+      <div id="chart-c1" class="chart" role="img"></div>
+      <p class="caption">Hourly median with the 10th to 90th percentile band for each borough, from /api/hourly.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c2-title"></div>
+      <div id="chart-c2" class="chart" role="img"></div>
+      <p class="caption">Monthly median and 90th percentile.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="h3-title"></div>
+      <div id="chart-h3" class="chart" role="img"></div>
+      <p class="caption">Share of incidents taking over 10 minutes, by severity and hour band.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Where</h2>
+  <div class="grid">
+    <div class="col-12 panel">
+      <div class="chart-title" id="c5-title"></div>
+      <div id="chart-c5" class="chart" role="img"></div>
+      <p class="caption">Borough comparison, median with the 10th to 90th percentile range.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c4-title"></div>
+      <div id="chart-c4" class="chart" role="img"></div>
+      <p class="caption">Distribution of response times in two minute bins, with the median and 90th percentile marked.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What</h2>
+  <div class="grid">
+    <div class="col-12 panel">
+      <div class="chart-title" id="c3-title"></div>
+      <div id="chart-c3" class="chart tall" role="img"></div>
+      <p class="caption">Slowest call types by median response time, with incident counts.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c6-title"></div>
+      <div id="chart-c6" class="chart" role="img"></div>
+      <p class="caption">Median response time by severity level. Level 1 is the highest priority.</p>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c7-title"></div>
+      <div id="chart-c7" class="chart" role="img"></div>
+      <p class="caption">Median response time by weather condition and holidays, from one citywide hourly series for 2023. Snow means any snowfall in the hour.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Model</h2>
+  <div class="grid">
+    <div class="col-12 panel">
+      <div class="chart-title" id="c8-title"></div>
+      <div id="chart-c8" class="chart" role="img"></div>
+      <div class="table-scroll">
+        <table class="data" id="model-table">
+          <caption class="visually-hidden">Model comparison</caption>
+          <thead><tr><th scope="col">Model</th><th scope="col" class="num">MAE</th>
+            <th scope="col" class="num">RMSE</th><th scope="col" class="num">R2</th>
+            <th scope="col" class="num">Within 2 min</th></tr></thead>
+          <tbody id="model-body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12 panel">
+      <div class="chart-title" id="c9-title"></div>
+      <div id="chart-c9" class="chart" role="img"></div>
+      <p class="caption" id="shap-note"></p>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script type="module" src="/static/js/insights.js"></script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{
+  "precipitation": [
+    {
+      "precipitation_band": "dry",
+      "holiday": 0,
+      "count": 283014,
+      "median": 8.17,
+      "p90": 19.68,
+      "share_over_10": 0.3635
+    },
+    {
+      "precipitation_band": "dry",
+      "holiday": 1,
+      "count": 14181,
+      "median": 7.42,
+      "p90": 15.68,
+      "share_over_10": 0.2936
+    },
+    {
+      "precipitation_band": "heavy rain",
+      "holiday": 0,
+      "count": 6789,
+      "median": 8.3,
+      "p90": 19.9,
+      "share_over_10": 0.38
+    },
+    {
+      "precipitation_band": "light rain",
+      "holiday": 0,
+      "count": 28336,
+      "median": 8.25,
+      "p90": 19.82,
+      "share_over_10": 0.3695
+    },
+    {
+      "precipitation_band": "light rain",
+      "holiday": 1,
+      "count": 1235,
+      "median": 6.75,
+      "p90": 13.53,
+      "share_over_10": 0.2364
+    },
+    {
+      "precipitation_band": "moderate rain",
+      "holiday": 0,
+      "count": 15787,
+      "median": 8.55,
+      "p90": 21.46,
+      "share_over_10": 0.3947
+    },
+    {
+      "precipitation_band": "moderate rain",
+      "holiday": 1,
+      "count": 911,
+      "median": 7.18,
+      "p90": 16.4,
+      "share_over_10": 0.2843
+    }
+  ],
+  "snow": [
+    {
+      "snow": 0,
+      "count": 348451,
+      "median": 8.17,
+      "p90": 19.62,
+      "share_over_10": 0.3625
+    },
+    {
+      "snow": 1,
+      "count": 1802,
+      "median": 7.72,
+      "p90": 15.03,
+      "share_over_10": 0.2963
+    }
+  ],
+  "source": "Open Meteo archive API, one citywide hourly series for New York City, 2023",
+  "holiday_source": "holidays package, US calendar, 2023",
+  "kept": true
+}

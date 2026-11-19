@@ -1,0 +1,38 @@
+{# C:\aimlmini\app\templates\base.html #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How long ambulances take to reach patients across New York City, with predictions by zone, hour and severity.">
+  <title>{% block title %}Response Atlas{% endblock %}</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/fonts/fonts.css">
+  <link rel="stylesheet" href="/static/vendor/leaflet.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a class="visually-hidden" href="#main">Skip to content</a>
+  <header class="site">
+    <div class="wrap">
+      <a href="/" class="wordmark">Response Atlas</a>
+      <nav aria-label="Main navigation">
+        <a href="/" {% if active_page == 'overview' %}aria-current="page"{% endif %}>Overview</a>
+        <a href="/predict" {% if active_page == 'predict' %}aria-current="page"{% endif %}>Predict</a>
+        <a href="/insights" {% if active_page == 'insights' %}aria-current="page"{% endif %}>Insights</a>
+        <a href="/method" {% if active_page == 'method' %}aria-current="page"{% endif %}>Method</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site">
+    <div class="wrap">
+      <p>Built from NYC EMS Incident Dispatch Data, 2023, NYC Open Data, dataset 76xm-jjuj. Response times are dispatch to arrival in minutes. Zones are zip codes combined into MODZCTA areas. Exact incident locations are not published.</p>
+    </div>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

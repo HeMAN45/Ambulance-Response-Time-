@@ -1,0 +1,109 @@
+{# C:\aimlmini\app\templates\overview.html #}
+{% extends "base.html" %}
+{% block title %}Overview | Response Atlas{% endblock %}
+{% block head %}
+<script src="/static/vendor/leaflet.js"></script>
+<script src="/static/vendor/echarts.min.js"></script>
+{% endblock %}
+{% block content %}
+<h1>Where and when ambulance response is slow</h1>
+<p class="lede">Median response time by zone and hour for 350,253 EMS incidents across New York City in 2023.</p>
+
+<div class="summary-strip" id="summary">
+  <div class="figure"><div class="value" id="sum-median">...</div><div class="label">Median response time, minutes</div></div>
+  <div class="figure"><div class="value" id="sum-p90">...</div><div class="label">90th percentile, minutes</div></div>
+  <div class="figure"><div class="value" id="sum-share">...</div><div class="label">Incidents over 10 minutes</div></div>
+  <div class="figure"><div class="value" id="sum-count">...</div><div class="label">Incidents analysed</div></div>
+</div>
+
+<div class="controls" role="group" aria-label="Map filters">
+  <div class="field">
+    <label for="band">Hour band</label>
+    <select id="band">
+      <option value="all">All hours</option>
+      <option value="overnight">Overnight, 0 to 6</option>
+      <option value="morning">Morning, 6 to 12</option>
+      <option value="midday">Midday, 12 to 18</option>
+      <option value="evening">Evening, 18 to 24</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="severity">Severity</label>
+    <select id="severity">
+      <option value="all">All severities</option>
+      <option value="1">1, highest priority</option>
+      <option value="2">2</option><option value="3">3</option><option value="4">4</option>
+      <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+    </select>
+  </div>
+  <div class="field field--seg">
+    <div class="seg" role="group" aria-label="Metric">
+      <button id="metric-median" aria-pressed="true">Median</button>
+      <button id="metric-p90" aria-pressed="false">90th pct</button>
+      <button id="metric-share" aria-pressed="false">Over 10 min</button>
+    </div>
+  </div>
+  <div class="field field--seg">
+    <div class="seg" role="group" aria-label="Map view">
+      <button id="view-single" aria-pressed="true">One map</button>
+      <button id="view-bands" aria-pressed="false">Four bands</button>
+      <button id="view-diff" aria-pressed="false">Difference</button>
+      <button id="view-volume" aria-pressed="false">Volume</button>
+    </div>
+  </div>
+  <div class="field field--action">
+    <label for="export" class="visually-hidden">Export</label>
+    <button id="export" class="secondary">Export CSV</button>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="col-8">
+    <div id="map" role="img" aria-label="Choropleth map of response time by zone"></div>
+    <p class="caption" id="map-caption">Zones are zip codes combined into MODZCTA areas. Exact incident locations are not published. Zones with fewer than 30 incidents are shown in grey as not enough data.</p>
+  </div>
+  <div class="col-4">
+    <div class="panel" id="zone-panel">
+      <h3>Zone detail</h3>
+      <p class="small" id="zone-hint">Click a zone on the map to see its 24 hour profile and key figures.</p>
+      <div id="zone-body" style="display:none">
+        <h3 id="zone-name"></h3>
+        <div class="summary-strip" style="grid-template-columns:1fr 1fr">
+          <div class="figure"><div class="value num" id="zone-median"></div><div class="label">Median, min</div></div>
+          <div class="figure"><div class="value num" id="zone-count"></div><div class="label">Incidents</div></div>
+        </div>
+        <div id="zone-chart" class="chart shot"></div>
+        <p class="caption" id="zone-note"></p>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Zone ranking</h3>
+      <p class="small">Slowest zones by median response time. The line shows the monthly trend.</p>
+      <div class="table-scroll">
+        <table class="data" id="rank-table">
+          <thead><tr>
+            <th scope="col" data-sort="zone">Zone</th>
+            <th scope="col">Borough</th>
+            <th scope="col" class="num" data-sort="median">Median</th>
+            <th scope="col" class="num" data-sort="p90">90th pct</th>
+            <th scope="col" class="num" data-sort="count">Incidents</th>
+            <th scope="col">Monthly trend</th>
+          </tr></thead>
+          <tbody id="rank-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="band-maps" class="grid" style="display:none">
+  <div class="col-3"><h3 class="small">Overnight</h3><div class="mini-map band" id="map-overnight"></div></div>
+  <div class="col-3"><h3 class="small">Morning</h3><div class="mini-map band" id="map-morning"></div></div>
+  <div class="col-3"><h3 class="small">Midday</h3><div class="mini-map band" id="map-midday"></div></div>
+  <div class="col-3"><h3 class="small">Evening</h3><div class="mini-map band" id="map-evening"></div></div>
+  <p class="caption col-12">All four maps share one colour scale so they can be compared by eye.</p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="module" src="/static/js/overview.js"></script>
+{% endblock %}

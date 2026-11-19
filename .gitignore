@@ -1,0 +1,17 @@
+# C:\aimlmini\.gitignore
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.log
+.env
+
+# Large or rebuildable data stays out of git. Run the ml pipeline to recreate it.
+data/raw/*.csv
+data/processed/clean.csv
+data/processed/train.csv
+data/processed/test.csv
+tmp/
+
+# Small saved statistics, geo boundaries and trained models are kept so the
+# app can run immediately after a clone.

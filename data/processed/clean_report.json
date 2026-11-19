@@ -1,0 +1,30 @@
+{
+  "source_rows": 371869,
+  "sampling": "every 4th day of month across 2023 (done at download time)",
+  "after_valid_flag": 355511,
+  "removed_invalid_flag": 16358,
+  "after_target_not_null": 355511,
+  "removed_null_target": 0,
+  "response_min_quantiles_before_cut": {
+    "0.5": 8.23,
+    "0.75": 12.55,
+    "0.9": 21.02,
+    "0.95": 31.17,
+    "0.99": 72.73
+  },
+  "after_60min_cut": 350253,
+  "removed_over_60min": 5258,
+  "rows_without_zone": 4669,
+  "final_rows": 350253,
+  "severity_values": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+  ],
+  "zones": 178
+}

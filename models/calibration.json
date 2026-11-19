@@ -1,0 +1,97 @@
+{
+  "pred_vs_actual": [
+    {
+      "bin": 0,
+      "predicted": 5.67,
+      "actual": 6.31,
+      "count": 7005
+    },
+    {
+      "bin": 1,
+      "predicted": 6.44,
+      "actual": 7.08,
+      "count": 7005
+    },
+    {
+      "bin": 2,
+      "predicted": 6.83,
+      "actual": 7.65,
+      "count": 7005
+    },
+    {
+      "bin": 3,
+      "predicted": 7.19,
+      "actual": 8.34,
+      "count": 7005
+    },
+    {
+      "bin": 4,
+      "predicted": 7.72,
+      "actual": 9.23,
+      "count": 7005
+    },
+    {
+      "bin": 5,
+      "predicted": 8.43,
+      "actual": 11.03,
+      "count": 7006
+    },
+    {
+      "bin": 6,
+      "predicted": 9.12,
+      "actual": 13.43,
+      "count": 7003
+    },
+    {
+      "bin": 7,
+      "predicted": 9.89,
+      "actual": 15.49,
+      "count": 7006
+    },
+    {
+      "bin": 8,
+      "predicted": 10.96,
+      "actual": 17.4,
+      "count": 7005
+    },
+    {
+      "bin": 9,
+      "predicted": 13.52,
+      "actual": 21.17,
+      "count": 7006
+    }
+  ],
+  "range_coverage_by_borough": {
+    "Bronx": 0.7221,
+    "Brooklyn": 0.7454,
+    "Manhattan": 0.7242,
+    "Queens": 0.7615,
+    "Richmond / Staten Island": 0.7484
+  },
+  "error_by_hour": {
+    "0": 3.63,
+    "1": 3.67,
+    "2": 3.77,
+    "3": 3.78,
+    "4": 3.95,
+    "5": 4.21,
+    "6": 4.88,
+    "7": 5.02,
+    "8": 5.34,
+    "9": 5.4,
+    "10": 4.96,
+    "11": 5.25,
+    "12": 5.83,
+    "13": 5.68,
+    "14": 6.05,
+    "15": 6.89,
+    "16": 6.87,
+    "17": 7.11,
+    "18": 7.43,
+    "19": 6.11,
+    "20": 5.19,
+    "21": 4.78,
+    "22": 4.6,
+    "23": 4.03
+  }
+}

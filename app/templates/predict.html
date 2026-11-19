@@ -1,0 +1,123 @@
+{# C:\aimlmini\app\templates\predict.html #}
+{% extends "base.html" %}
+{% block title %}Predict | Response Atlas{% endblock %}
+{% block head %}
+<script src="/static/vendor/leaflet.js"></script>
+<script src="/static/vendor/echarts.min.js"></script>
+{% endblock %}
+{% block content %}
+<h1>Estimate a response time</h1>
+<p class="lede">Pick a case. The model gives a likely range, not a single certain number.</p>
+
+<div class="note">
+  The estimate is the 50th percentile model. The range is the 10th to 90th percentile of the model. In the test period about 74 percent of real incidents fell inside it, so treat the range as a guide rather than a guarantee. Month is taken from today's date.
+</div>
+
+<div class="grid" id="compare-grid">
+  <div class="col-4">
+    <div class="panel" id="panel-a">
+      <h2>Case A</h2>
+      <form id="form-a" autocomplete="off">
+        <div class="field"><label for="a-borough">Borough</label>
+          <select id="a-borough" required><option value="">Select a borough</option>
+          {% for b in zips_by_borough|sort %}<option value="{{ b }}">{{ b }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="a-zip">Zip code</label>
+          <select id="a-zip" required disabled><option value="">Select a zip code</option></select></div>
+        <div class="field"><label for="a-hour">Hour of day</label>
+          <select id="a-hour">{% for h in range(24) %}<option value="{{ h }}">{{ '%02d'|format(h) }}:00</option>{% endfor %}</select></div>
+        <div class="field"><label for="a-dow">Day of week</label>
+          <select id="a-dow">
+            <option value="0">Monday</option><option value="1">Tuesday</option><option value="2">Wednesday</option>
+            <option value="3">Thursday</option><option value="4">Friday</option><option value="5">Saturday</option>
+            <option value="6">Sunday</option></select></div>
+        <div class="field"><label for="a-sev">Initial severity level</label>
+          <select id="a-sev">{% for s in schema.initial_severity_level_code %}<option value="{{ s }}">{{ s }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="a-call">Initial call type</label>
+          <select id="a-call">{% for c in schema.initial_call_type %}<option value="{{ c }}">{{ c }}</option>{% endfor %}</select></div>
+        <button type="submit">Estimate case A</button>
+        <button type="button" class="secondary" id="show-compare">Add case B to compare</button>
+        <p class="error-msg" id="err-a" role="alert"></p>
+      </form>
+    </div>
+  </div>
+  <div class="col-4" id="panel-b-wrap" style="display:none">
+    <div class="panel" id="panel-b">
+      <h2>Case B</h2>
+      <form id="form-b" autocomplete="off">
+        <div class="field"><label for="b-borough">Borough</label>
+          <select id="b-borough" required><option value="">Select a borough</option>
+          {% for b in zips_by_borough|sort %}<option value="{{ b }}">{{ b }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="b-zip">Zip code</label>
+          <select id="b-zip" required disabled><option value="">Select a zip code</option></select></div>
+        <div class="field"><label for="b-hour">Hour of day</label>
+          <select id="b-hour">{% for h in range(24) %}<option value="{{ h }}">{{ '%02d'|format(h) }}:00</option>{% endfor %}</select></div>
+        <div class="field"><label for="b-dow">Day of week</label>
+          <select id="b-dow">
+            <option value="0">Monday</option><option value="1">Tuesday</option><option value="2">Wednesday</option>
+            <option value="3">Thursday</option><option value="4">Friday</option><option value="5">Saturday</option>
+            <option value="6">Sunday</option></select></div>
+        <div class="field"><label for="b-sev">Initial severity level</label>
+          <select id="b-sev">{% for s in schema.initial_severity_level_code %}<option value="{{ s }}">{{ s }}</option>{% endfor %}</select></div>
+        <div class="field"><label for="b-call">Initial call type</label>
+          <select id="b-call">{% for c in schema.initial_call_type %}<option value="{{ c }}">{{ c }}</option>{% endfor %}</select></div>
+        <button type="submit">Estimate case B</button>
+        <p class="error-msg" id="err-b" role="alert"></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="panel">
+      <h3>Selected zone</h3>
+      <div class="mini-map" id="mini-map" role="img" aria-label="Map highlighting the selected zone"></div>
+      <p class="caption" id="mini-note">Run an estimate to shade its zone. Zones are shaded, not marked with a pin, because exact locations are not in the data.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="result-panel" style="display:none">
+  <h2>Result</h2>
+  <div class="result-range">
+    <span class="big" id="res-p50"></span>
+    <span class="small" id="res-range"></span>
+  </div>
+  <p class="caption" id="res-compare"></p>
+  <p class="caption" id="res-sparse"></p>
+  <div id="waterfall" class="chart"></div>
+  <p class="caption">The waterfall shows how each feature moves the estimate away from the average case. Built from the 50th percentile model's own contribution output.</p>
+</div>
+
+<div class="grid" id="analytics" style="display:none">
+  <div class="col-6">
+    <div class="panel">
+      <h3 id="zone-hour-title">This zone by hour</h3>
+      <div id="chart-zone-hour" class="chart shot" role="img"></div>
+      <p class="caption" id="zone-hour-note"></p>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="panel">
+      <h3 id="zone-month-title">This zone across 2023</h3>
+      <div id="chart-zone-month" class="chart shot" role="img"></div>
+      <p class="caption" id="zone-month-note"></p>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="panel">
+      <h3 id="context-title">How this estimate compares</h3>
+      <div id="chart-context" class="chart shot" role="img"></div>
+      <p class="caption" id="context-note"></p>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="compare-panel" style="display:none">
+  <h2>Comparison</h2>
+  <div id="compare-chart" class="chart"></div>
+  <p class="caption" id="compare-note"></p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script type="application/json" id="zips-data">{{ zips_by_borough|tojson }}</script>
+<script type="module" src="/static/js/predict.js"></script>
+{% endblock %}

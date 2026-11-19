@@ -1,0 +1,296 @@
+{
+  "models": [
+    {
+      "name": "Baseline: median by borough and hour",
+      "mae": 6.005,
+      "rmse": 10.208,
+      "r2": -0.117,
+      "within_2min_share": 0.3291
+    },
+    {
+      "name": "Ridge regression",
+      "mae": 5.572,
+      "rmse": 8.836,
+      "r2": 0.163,
+      "within_2min_share": 0.2969
+    },
+    {
+      "name": "Random Forest",
+      "mae": 5.414,
+      "rmse": 8.908,
+      "r2": 0.149,
+      "within_2min_share": 0.3442
+    },
+    {
+      "name": "XGBoost",
+      "mae": 5.273,
+      "rmse": 8.489,
+      "r2": 0.227,
+      "within_2min_share": 0.3386
+    }
+  ],
+  "trained_at": "2026-11-19 09:49:53",
+  "baseline_mae": 6.005,
+  "quantile_models": [
+    {
+      "name": "p10",
+      "alpha": 0.1,
+      "mae": 7.526
+    },
+    {
+      "name": "p50",
+      "alpha": 0.5,
+      "mae": 5.41
+    },
+    {
+      "name": "p90",
+      "alpha": 0.9,
+      "mae": 7.873
+    }
+  ],
+  "range_coverage": 0.7387,
+  "error_by_borough": {
+    "Bronx": 6.37,
+    "Brooklyn": 4.92,
+    "Manhattan": 6.25,
+    "Queens": 4.49,
+    "Richmond / Staten Island": 3.61
+  },
+  "error_by_hour": {
+    "0": 3.63,
+    "1": 3.67,
+    "2": 3.77,
+    "3": 3.78,
+    "4": 3.95,
+    "5": 4.21,
+    "6": 4.88,
+    "7": 5.02,
+    "8": 5.34,
+    "9": 5.4,
+    "10": 4.96,
+    "11": 5.25,
+    "12": 5.83,
+    "13": 5.68,
+    "14": 6.05,
+    "15": 6.89,
+    "16": 6.87,
+    "17": 7.11,
+    "18": 7.43,
+    "19": 6.11,
+    "20": 5.19,
+    "21": 4.78,
+    "22": 4.6,
+    "23": 4.03
+  },
+  "error_by_severity": {
+    "1": 2.0,
+    "2": 2.6,
+    "3": 2.75,
+    "4": 6.51,
+    "5": 7.2,
+    "6": 7.82,
+    "7": 8.53,
+    "8": 8.05
+  },
+  "feature_importance": [
+    {
+      "feature": "initial_severity_level_code_7",
+      "importance": 0.05409
+    },
+    {
+      "feature": "initial_severity_level_code_1",
+      "importance": 0.05268
+    },
+    {
+      "feature": "initial_severity_level_code_3",
+      "importance": 0.03066
+    },
+    {
+      "feature": "borough_Manhattan",
+      "importance": 0.022
+    },
+    {
+      "feature": "initial_severity_level_code_2",
+      "importance": 0.01995
+    },
+    {
+      "feature": "incident_dispatch_area_Q1",
+      "importance": 0.01562
+    },
+    {
+      "feature": "borough_Richmond / Staten Island",
+      "importance": 0.01436
+    },
+    {
+      "feature": "incident_dispatch_area_K4",
+      "importance": 0.01311
+    },
+    {
+      "feature": "initial_severity_level_code_6",
+      "importance": 0.01223
+    },
+    {
+      "feature": "borough_Bronx",
+      "importance": 0.01203
+    },
+    {
+      "feature": "incident_dispatch_area_M9",
+      "importance": 0.01182
+    },
+    {
+      "feature": "zone_11370",
+      "importance": 0.01162
+    },
+    {
+      "feature": "holiday",
+      "importance": 0.00999
+    },
+    {
+      "feature": "incident_dispatch_area_M8",
+      "importance": 0.00992
+    },
+    {
+      "feature": "incident_dispatch_area_K2",
+      "importance": 0.0099
+    },
+    {
+      "feature": "incident_dispatch_area_M7",
+      "importance": 0.00936
+    },
+    {
+      "feature": "initial_severity_level_code_5",
+      "importance": 0.00871
+    },
+    {
+      "feature": "weekend",
+      "importance": 0.00797
+    },
+    {
+      "feature": "incident_dispatch_area_M2",
+      "importance": 0.00776
+    },
+    {
+      "feature": "zone_11208",
+      "importance": 0.00771
+    }
+  ],
+  "best_model": "XGBoost",
+  "beats_baseline": true,
+  "weather_experiment": {
+    "without_mae": 5.452,
+    "with_mae": 5.273,
+    "improved": true,
+    "kept": true,
+    "features": [
+      "temperature_2m",
+      "precipitation",
+      "snowfall",
+      "is_snow",
+      "holiday"
+    ],
+    "source": "Open Meteo archive API, one citywide hourly series for New York City, 2023",
+    "holiday_source": "holidays package, US calendar, 2023",
+    "decision": "kept",
+    "note": "Weather and holiday features lowered test MAE, so the production pipeline keeps them."
+  },
+  "shap_sample_rows": 5000,
+  "shap_top_features": [
+    {
+      "feature": "initial_severity_level_code",
+      "plain_name": "severity",
+      "mean_abs_contribution_min": 1.401,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "hour",
+      "plain_name": "hour of day",
+      "mean_abs_contribution_min": 0.452,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "month",
+      "plain_name": "month",
+      "mean_abs_contribution_min": 0.418,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "temperature_2m",
+      "plain_name": "temperature",
+      "mean_abs_contribution_min": 0.407,
+      "direction": "lowers response time"
+    },
+    {
+      "feature": "incident_dispatch_area",
+      "plain_name": "dispatch area",
+      "mean_abs_contribution_min": 0.289,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "zone",
+      "plain_name": "zip zone",
+      "mean_abs_contribution_min": 0.221,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "day_of_week",
+      "plain_name": "day of week",
+      "mean_abs_contribution_min": 0.201,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "borough",
+      "plain_name": "borough",
+      "mean_abs_contribution_min": 0.154,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "initial_call_type",
+      "plain_name": "call type",
+      "mean_abs_contribution_min": 0.111,
+      "direction": "lowers response time"
+    },
+    {
+      "feature": "hour_band",
+      "plain_name": "hour band",
+      "mean_abs_contribution_min": 0.084,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "holiday",
+      "plain_name": "holiday",
+      "mean_abs_contribution_min": 0.028,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "precipitation",
+      "plain_name": "precipitation",
+      "mean_abs_contribution_min": 0.016,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "weekend",
+      "plain_name": "weekend",
+      "mean_abs_contribution_min": 0.014,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "snowfall",
+      "plain_name": "snowfall",
+      "mean_abs_contribution_min": 0.0,
+      "direction": "raises response time"
+    },
+    {
+      "feature": "is_snow",
+      "plain_name": "snow",
+      "mean_abs_contribution_min": 0.0,
+      "direction": "lowers response time"
+    }
+  ],
+  "top_drivers_plain": [
+    "severity (raises response time)",
+    "hour of day (raises response time)",
+    "month (raises response time)",
+    "temperature (lowers response time)",
+    "dispatch area (raises response time)"
+  ]
+}

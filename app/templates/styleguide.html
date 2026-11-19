@@ -1,0 +1,143 @@
+{# C:\aimlmini\app\templates\styleguide.html #}
+{% extends "base.html" %}
+{% block title %}Style test | Response Atlas{% endblock %}
+{% block head %}
+<script src="/static/vendor/echarts.min.js"></script>
+{% endblock %}
+{% block content %}
+<h1>Style test page</h1>
+<p class="lede">Internal page. It shows the tokens and components from the design rules in one place. It is not linked from the site navigation.</p>
+
+<section>
+  <h2>Typography and numbers</h2>
+  <div class="panel">
+    <h3>Heading level three</h3>
+    <p>Body text uses Inter at 16 px with a line height of 1.5 and a maximum line length near 70 characters. Sentence case, specific and factual. Units always appear with numbers.</p>
+    <p class="small">Small text is 12 px and muted. Used for captions and secondary labels.</p>
+    <p class="num">123,456 incidents, 8.4 min, 27.3%</p>
+    <p><a href="#main">A text link with the primary colour</a></p>
+  </div>
+</section>
+
+<section>
+  <h2>Colour tokens</h2>
+  <div class="panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px">
+      {% for name, token in [('Canvas','canvas'),('Surface','surface'),('Ink','ink'),('Muted ink','muted'),('Rule','rule'),('Primary','primary'),('Alert','alert'),('No data','nodata')] %}
+      <div>
+        <div style="height:56px;border:1px solid var(--rule);border-radius:4px;background:var(--{{ token }})"></div>
+        <p class="small">{{ name }}, var(--{{ token }})</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div style="margin-top:16px">
+      <div class="legend" style="display:inline-block">
+        <div class="ramp">{% for i in range(1,6) %}<span style="background:var(--ramp-{{ i }})"></span>{% endfor %}</div>
+        <div class="ticks"><span>fast</span><span>slow</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Summary strip</h2>
+  <div class="summary-strip">
+    <div class="figure"><div class="value">{{ summary.median }}<span class="unit">min</span></div><div class="label">Median response time</div></div>
+    <div class="figure"><div class="value">{{ summary.p90 }}<span class="unit">min</span></div><div class="label">90th percentile</div></div>
+    <div class="figure"><div class="value">{{ (summary.share_over_10 * 100)|round(1) }}<span class="unit">%</span></div><div class="label">Incidents over 10 minutes</div></div>
+    <div class="figure"><div class="value">{{ '{:,}'.format(summary.count) }}</div><div class="label">Incidents analysed</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Controls and messages</h2>
+  <div class="panel">
+    <div class="controls">
+      <div class="field">
+        <label for="demo-band">Hour band</label>
+        <select id="demo-band"><option>All hours</option><option>Evening</option></select>
+      </div>
+      <div class="field">
+        <label for="demo-zip">Zip code</label>
+        <input id="demo-zip" value="11226">
+      </div>
+      <div class="field">
+        <span class="field" aria-hidden="true"></span>
+        <div class="seg" role="group" aria-label="Metric">
+          <button aria-pressed="true">Median</button>
+          <button aria-pressed="false">90th pct</button>
+        </div>
+      </div>
+      <div class="field" style="flex:0">
+        <button type="button">Primary action</button>
+      </div>
+      <div class="field" style="flex:0">
+        <button type="button" class="secondary">Secondary</button>
+      </div>
+    </div>
+    <p class="note">A note uses a thin primary rule on the left. It explains an assumption in one or two sentences.</p>
+    <p class="error-msg show" role="alert">A plain error message. Example: hour must be between 0 and 23.</p>
+    <p class="caption">A caption explains what the data covers and never repeats the chart title.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Table</h2>
+  <div class="panel">
+    <div class="table-scroll">
+      <table class="data">
+        <caption class="visually-hidden">Slowest zones, real values</caption>
+        <thead><tr><th scope="col">Zone</th><th scope="col" class="num">Median</th><th scope="col" class="num">90th pct</th><th scope="col" class="num">Incidents</th></tr></thead>
+        <tbody>
+          {% for z in zones %}
+          <tr><td>{{ z.zone }}</td><td class="num">{{ z.median }}</td><td class="num">{{ z.p90 }}</td><td class="num">{{ '{:,}'.format(z.count) }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Chart theme</h2>
+  <div class="panel">
+    <div class="chart-title" id="style-chart-title">Hourly median response time</div>
+    <div class="chart" id="style-chart" role="img" aria-label="Hourly median response time, line chart"></div>
+    <p class="caption">One hue, thin line, axis units, no legend. The chart uses the shared theme from common.js and real /api/hourly data.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Empty state</h2>
+  <div class="panel">
+    <p class="small">No data for this filter. Adjust the hour band or severity to see zones.</p>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script type="module">
+  import { fetchJSON, baseChart, axisCommon, THEME } from '/static/js/common.js';
+
+  async function draw() {
+    const recs = (await fetchJSON('/api/hourly?borough=all')).records;
+    document.getElementById('style-chart').setAttribute('aria-label', document.getElementById('style-chart-title').textContent);
+    echarts.init(document.getElementById('style-chart')).setOption(baseChart({
+      xAxis: axisCommon({ type: 'category', data: recs.map(r => `${r.hour}`) }),
+      yAxis: axisCommon({ type: 'value', name: 'min' }),
+      series: [{
+        type: 'line', data: recs.map(r => r.median),
+        lineStyle: { color: THEME.primary, width: 2 }, itemStyle: { color: THEME.primary },
+        symbolSize: 4,
+      }],
+      tooltip: { valueFormatter: v => `${v} min` },
+    }));
+  }
+
+  draw().catch(err => {
+    const el = document.createElement('p');
+    el.className = 'error-msg show';
+    el.textContent = `Chart could not load: ${err.message}`;
+    document.querySelector('main').prepend(el);
+  });
+</script>
+{% endblock %}
