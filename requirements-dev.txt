@@ -1,0 +1,7 @@
+-r requirements.txt
+shap==0.54.1
+requests==2.34.2
+geopandas==1.2.0
+holidays==0.109
+pytest==9.2.0
+gunicorn==27.0.1; sys_platform != 'win32'

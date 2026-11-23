@@ -10,7 +10,7 @@ for _name in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS", "NUM
 
 from app import create_app
 
-app = create_app()
+app = create_app("development" if __name__ == "__main__" else "production")
 
 if __name__ == "__main__":
     # The reloader starts a second process that loads the model again, which can

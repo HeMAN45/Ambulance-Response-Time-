@@ -65,7 +65,7 @@ Top drivers from the explanation sample of 5,000 test rows: severity, hour of da
 
 ## Run the app
 
-The trained models and processed statistics are already present in this working copy, so the app runs without retraining. They are ignored by git, so a fresh clone rebuilds them with the pipeline below.
+The repository includes the trained models and processed statistics, so the app runs without retraining. Use the pipeline below to rebuild them.
 
 Windows PowerShell:
 
@@ -96,6 +96,8 @@ gunicorn wsgi:app
 Configuration is read from environment variables. `RESPONSE_ATLAS_SECRET_KEY` sets the Flask secret key. `create_app` accepts `development` or `production`.
 
 ## Rebuild the data and models
+
+Install the training and testing dependencies with `python -m pip install -r requirements-dev.txt`.
 
 Run these from the repository root, in this order. The scripts read and write relative paths under `data/`, `models/` and `tmp/`.
 

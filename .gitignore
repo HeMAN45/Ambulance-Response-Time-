@@ -15,3 +15,5 @@ tmp/
 
 # Small saved statistics, geo boundaries and trained models are kept so the
 # app can run immediately after a clone.
+
+.vercel
